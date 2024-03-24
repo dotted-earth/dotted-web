@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ChakraProvider } from "@chakra-ui/react";
-import { MainPage } from "./_components/MainPage";
+import { MainPage } from "./MainPage";
 
 export default function Home() {
   return (
