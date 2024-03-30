@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { Marcellus_SC } from "next/font/google";
 import {
   Button,
   Input,
@@ -10,11 +11,16 @@ import {
 import Image from "next/image";
 import { IconCard } from "./_components/IconCard";
 
+const marcellusSC = Marcellus_SC({ weight: "400", subsets: ["latin"] });
+
 export const MainPage = () => {
   const handleOnClick = () => {
     document
       .getElementById("sign-up-input")
       ?.scrollIntoView({ behavior: "smooth" });
+    setTimeout(() => {
+      document.getElementById("sign-up-input")?.focus();
+    }, 500);
   };
 
   return (
@@ -29,7 +35,11 @@ export const MainPage = () => {
         className="flex flex-col items-center bg-blue-500 bg-gradient-to-t from-white via-black to-black py-48"
       >
         <div className="flex flex-col text-white items-center">
-          <Text fontWeight="900" fontSize="6xl">
+          <Text
+            className={marcellusSC.className}
+            fontWeight="900"
+            fontSize="6xl"
+          >
             Dotted
           </Text>
           <Text
@@ -64,7 +74,7 @@ export const MainPage = () => {
         />
         <div className="flex flex-col items-center justify-center">
           <Text
-            className="text-indigo-700 text-center text-2xl sm:text-6xl"
+            className={`text-indigo-700 text-center text-2xl sm:text-6xl ${marcellusSC.className}`}
             fontWeight="900"
           >
             Travel Like A Pro
@@ -107,7 +117,7 @@ export const MainPage = () => {
         <div className="flex flex-col items-center space-y-4 mt-32">
           <Text
             fontWeight={800}
-            className="text-white uppercase tracking-wide text-center text-4xl sm:text-6xl"
+            className={`text-white uppercase tracking-wide text-center text-4xl sm:text-6xl ${marcellusSC.className}`}
           >
             Join the wait list!
           </Text>
