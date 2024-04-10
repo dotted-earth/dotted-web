@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Marcellus_SC } from "next/font/google";
 import {
   Button,
@@ -7,13 +7,23 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import { IconCard } from "./_components/IconCard";
+import { postEmailSignup } from "./_api/emailMutations";
+import { useMutation } from "@tanstack/react-query";
 
 const marcellusSC = Marcellus_SC({ weight: "400", subsets: ["latin"] });
 
 export const MainPage = () => {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [email, setEmail] = useState("");
+  const [isEmailValid, setIsEmailValid] = useState(true);
+
   const handleOnClick = () => {
     document
       .getElementById("sign-up-input")
@@ -21,6 +31,25 @@ export const MainPage = () => {
     setTimeout(() => {
       document.getElementById("sign-up-input")?.focus();
     }, 500);
+  };
+
+  const { data, mutate } = useMutation({
+    mutationFn: postEmailSignup,
+  });
+
+  const mutationError = data?.error;
+
+  const handleSubmit = async (
+    e:
+      | React.FormEvent<HTMLFormElement>
+      | React.FormEvent<HTMLInputElement>
+      | React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    const isFormValid = formRef?.current?.checkValidity?.() ?? true;
+    setIsEmailValid(isFormValid);
+    if (!isFormValid) return;
+    mutate({ email });
   };
 
   return (
@@ -128,44 +157,101 @@ export const MainPage = () => {
             Are you excited for the next evolution in travel agencies? Join now
             and be notified on product updates and news.
           </Text>
-          <InputGroup
-            rounded="full"
-            height="70px"
-            display="flex"
-            className="!w-4/5 sm:!w-[560px]"
-          >
-            <Input
-              id="sign-up-input"
-              variant="unstyled"
-              rounded="full"
-              colorScheme="purple"
-              fontSize={"2xl"}
-              placeholder="Enter email..."
-              textColor={"white"}
-              letterSpacing={"wide"}
-              fontWeight={"200"}
-              px="8"
-              className=" !placeholder-white border-2 focus:border-indigo-700 border-indigo-500"
-            />
-            <InputRightElement
-              width="60px"
-              height="100%"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              mr="8"
-              className="cursor-pointer"
+          <form noValidate ref={formRef} onSubmit={(e) => handleSubmit(e)}>
+            <FormControl
+              isInvalid={!!mutationError || isEmailValid}
+              className="sm:!w-[560px]"
             >
-              <Image
-                color="white"
-                className="text-white fill-current"
-                width="40"
-                height="40"
-                alt="input-icon"
-                src="/icons/paper-plane-icon.svg"
-              />
-            </InputRightElement>
-          </InputGroup>
+              <InputGroup rounded="full" height="70px" display="flex">
+                <Input
+                  required
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setIsEmailValid(true);
+                  }}
+                  type="email"
+                  id="sign-up-input"
+                  variant="unstyled"
+                  rounded="full"
+                  colorScheme="purple"
+                  fontSize={"2xl"}
+                  placeholder="Enter email..."
+                  textColor={"white"}
+                  letterSpacing={"wide"}
+                  fontWeight={"200"}
+                  px="8"
+                  pr="24"
+                  className=" !placeholder-white border-2 focus:border-indigo-700 border-indigo-500"
+                />
+                <InputRightElement
+                  width="60px"
+                  height="100%"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  mr="8"
+                  className="cursor-pointer"
+                  onClick={(e) => handleSubmit(e)}
+                >
+                  <Image
+                    color="white"
+                    className="text-white fill-current"
+                    width="40"
+                    height="40"
+                    alt="input-icon"
+                    src="/icons/paper-plane-icon.svg"
+                  />
+                </InputRightElement>
+              </InputGroup>
+              {mutationError && isEmailValid && (
+                <FormErrorMessage
+                  background={"tomato"}
+                  color={"white"}
+                  p={2}
+                  mx={5}
+                  rounded="lg"
+                  fontSize={"sm"}
+                  fontWeight={400}
+                  display={"flex"}
+                  justifyContent={"center"}
+                >
+                  {mutationError?.code === "23505"
+                    ? "Your email already exists."
+                    : "Something went wrong. Please try again later."}
+                </FormErrorMessage>
+              )}
+              {!isEmailValid && (
+                <FormHelperText
+                  background={"silver"}
+                  color={"white"}
+                  p={2}
+                  mx={5}
+                  rounded="lg"
+                  fontSize={"sm"}
+                  fontWeight={400}
+                  display={"flex"}
+                  justifyContent={"center"}
+                >
+                  Email is invalid. Please re-enter
+                </FormHelperText>
+              )}
+              {data && data.status === 201 && (
+                <FormHelperText
+                  background={"seagreen"}
+                  color={"white"}
+                  p={2}
+                  mx={5}
+                  rounded="lg"
+                  fontSize={"sm"}
+                  fontWeight={400}
+                  display={"flex"}
+                  justifyContent={"center"}
+                >
+                  {"You have been registered!"}
+                </FormHelperText>
+              )}
+            </FormControl>
+          </form>
         </div>
       </div>
     </div>
