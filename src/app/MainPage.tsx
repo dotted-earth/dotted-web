@@ -104,8 +104,7 @@ export const MainPage = () => {
         <Image
           alt="a map showing point-to-point destinations"
           src={travelLikeAProSvg}
-          width="700"
-          height="700"
+          className="h-[700px] w-[700px]"
           loading="lazy"
         />
         <div className="flex flex-col items-center justify-center gap-10">
