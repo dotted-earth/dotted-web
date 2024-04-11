@@ -9,6 +9,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { IconCard } from "@/components/ui/IconCard";
 import { Plane, Bot, Clock, Shapes } from "lucide-react";
+import { BackgroundBeams } from "@/components/ui/BackgroundBeams";
 
 const emailSchema = z.object({
   email: z
@@ -72,13 +73,14 @@ export const MainPage = () => {
           loading="eager"
         />
 
+        <BackgroundBeams className="-z-10" />
         <div className="absolute h-full w-full bg-gradient-to-t from-white from-10% via-white/20 via-30% -z-10"></div>
 
         <div className="container flex flex-col gap-10 text-white items-center z-10">
-          <p className="font-marcellus text-6xl tracking-wide text-white">
+          <p className="font-marcellus text-8xl tracking-wide text-white">
             Dotted
           </p>
-          <h1 className="text-center text-2xl sm:text-4xl text-white">
+          <h1 className="text-center text-2xl sm:text-4xl sm:max-w-md text-white">
             Last minute plans for the busy traveler
           </h1>
           <button
@@ -90,7 +92,9 @@ export const MainPage = () => {
               }
             }}
             className="rounded-full font-marcellus tracking-wide text-white bg-gradient-to-tr from-purple-300 to-indigo-800
-              text-2xl text-center py-2 px-10 drop-shadow-md"
+              text-2xl text-center px-10 py-3 drop-shadow-md ring-2 ring-indigo-500 
+              transition-all duration-300 ease-out hover:drop-shadow-xl 
+              "
           >
             Join Wait List
           </button>
