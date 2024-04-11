@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { IconCard } from "@/components/ui/IconCard";
-import { Plane } from "lucide-react";
+import { Plane, Bot, Clock, Shapes } from "lucide-react";
 
 const emailSchema = z.object({
   email: z
@@ -22,9 +22,7 @@ type EmailSchema = z.infer<typeof emailSchema>;
 import airplaneBg from "@assets/images/hero_img.png";
 import purpleBg from "@assets/images/purp-bg.png";
 import travelLikeAProSvg from "@assets/images/travel-like-a-pro.svg";
-import aiHeadSvg from "@assets/images/ai-icon.svg";
-import bellSvg from "@assets/images/bell-icon.svg";
-import userShapesSvg from "@assets/images/person-icon.svg";
+import { sleep } from "@/lib/sleep";
 
 export const MainPage = () => {
   const {
@@ -84,8 +82,12 @@ export const MainPage = () => {
             Last minute plans for the busy traveler
           </h1>
           <button
-            onClick={() => {
-              emailInputRef?.current?.scrollIntoView({ behavior: "smooth" });
+            onClick={async () => {
+              if (emailInputRef.current) {
+                emailInputRef.current.scrollIntoView({ behavior: "smooth" });
+                await sleep(500);
+                emailInputRef.current.focus();
+              }
             }}
             className="rounded-full font-marcellus tracking-wide text-white bg-gradient-to-tr from-purple-300 to-indigo-800
               text-2xl text-center py-2 px-10 drop-shadow-md"
@@ -126,20 +128,20 @@ export const MainPage = () => {
         <div className="container mx-auto space-y-20">
           <div className="mx-4 flex flex-col items-center gap-12 xl:mx-0 xl:gap-20 xl:flex-row xl:justify-center">
             <IconCard
-              icon={aiHeadSvg}
-              iconAlt="an icon of a gear cog inside of a head"
+              icon={Shapes}
+              iconAlt="shapes of triangle, square, and circle icon"
               title="Tailored For you"
               description="Set your travel preferences and get a personalized travel experience"
             />
             <IconCard
-              icon={bellSvg}
-              iconAlt="an icon of a bell ringing"
+              icon={Bot}
+              iconAlt="a robot icon"
               title="AI Generated"
               description="Our AI will build you an itinerary where you can further customize to your liking"
             />
             <IconCard
-              icon={userShapesSvg}
-              iconAlt="an icon of shapes attached to a user"
+              icon={Clock}
+              iconAlt="a clock icon"
               title="Time Management"
               description="Get notifications on upcoming activities or extend your current activity with a button"
             />
